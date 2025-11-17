@@ -2,3 +2,4 @@ target
 tmp.*
 *~
 /scripts/tmp
+process-repo.log

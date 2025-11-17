@@ -216,8 +216,8 @@ impl<R: gimli::Reader> ResUnits<R> {
         let mut res_units = Vec::new();
         let mut units = sections.units();
         while let Some(header) = units.next()? {
-            let unit_id = res_units.len();
-            let offset = match header.offset().as_debug_info_offset() {
+	    let unit_id = res_units.len();
+            let offset = match header.offset().to_debug_info_offset(&header) {
                 Some(offset) => offset,
                 None => continue,
             };
@@ -315,7 +315,7 @@ impl<R: gimli::Reader> ResUnits<R> {
                                 continue;
                             };
                             if arange.length() != 0 {
-                                unit_ranges.push(UnitRange {
+                                                                unit_ranges.push(UnitRange {
                                     range: arange.range(),
                                     unit_id,
                                     min_begin: 0,
@@ -340,19 +340,18 @@ impl<R: gimli::Reader> ResUnits<R> {
             if need_unit_range {
                 // The unit did not declare any ranges.
                 // Try to get some ranges from the line program sequences.
-                if let Some(ref ilnp) = dw_unit_ref.line_program {
+		if let Some(ref ilnp) = dw_unit_ref.line_program {
                     if let Ok(lines) = lines.borrow(dw_unit_ref, ilnp) {
-                        for range in lines.ranges() {
+			for range in lines.ranges() {
                             unit_ranges.push(UnitRange {
-                                range,
-                                unit_id,
-                                min_begin: 0,
+				range,
+				unit_id,
+				min_begin: 0,
                             })
-                        }
+			}
                     }
-                }
-            }
-
+		}
+	    }
             res_units.push(ResUnit {
                 offset,
                 dw_unit,
@@ -507,7 +506,7 @@ impl<R: gimli::Reader> SupUnits<R> {
         let mut sup_units = Vec::new();
         let mut units = sections.units();
         while let Some(header) = units.next()? {
-            let offset = match header.offset().as_debug_info_offset() {
+            let offset = match header.offset().to_debug_info_offset(&header) {
                 Some(offset) => offset,
                 None => continue,
             };
@@ -598,3 +597,4 @@ where
         self.next_loc()
     }
 }
+
