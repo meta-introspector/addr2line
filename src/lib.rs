@@ -52,7 +52,7 @@ use crate::unit::{ResUnit, ResUnits, SupUnits};
 
 #[cfg(feature = "smallvec")]
 mod maybe_small {
-    pub type Vec<T> = smallvec::SmallVec<[T; 16]>;
+    pub type Vec<T> = smallvec::SmallVec<T, 16>;
     pub type IntoIter<T> = smallvec::IntoIter<[T; 16]>;
 }
 #[cfg(not(feature = "smallvec"))]
