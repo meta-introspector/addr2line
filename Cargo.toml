@@ -27,6 +27,8 @@ smallvec = { workspace = true, optional = true }
 rustc-demangle = { version = "0.1", optional = true }
 cpp_demangle = { version = "0.5", features = ["alloc"], optional = true }
 
+
+
 # loader dependencies
 object = { version = "0.37.0", features = ["read", "compression"], optional = true }
 memmap2 = { version = "0.9.4", optional = true }
@@ -59,8 +61,8 @@ default = ["rustc-demangle", "cpp_demangle", "loader", "fallible-iterator", "sma
 std = ["gimli/std"]
 wasm = ["object/wasm"]
 loader = ["std", "dep:object", "dep:memmap2", "dep:typed-arena"]
-bin = ["loader", "rustc-demangle", "cpp_demangle", "fallible-iterator", "smallvec"]
-all = ["bin", "wasm"]
+
+all = ["wasm"]
 
 # Use of --all-features is not supported.
 # This is a dummy feature to detect when --all-features is used.
